@@ -13,14 +13,10 @@ jobs:
 
     name: PHP ${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
-    env:
-      CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-d
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
