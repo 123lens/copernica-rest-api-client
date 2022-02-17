@@ -26,7 +26,7 @@ class DatabaseTest extends TestCase
         $this->assertInstanceOf(Database::class, $database);
         $this->assertIsInt($database->ID);
         $this->assertSame(1, $database->ID);
-        $this->assertSame('PHPUnit Test Archived', $database->name);
+        $this->assertSame('PHPUnit_Test_Archived', $database->name);
         $this->assertSame('Database 1', $database->description);
         $this->assertTrue($database->archived);
         $this->assertInstanceOf(\DateTime::class, $database->created);
