@@ -65,4 +65,15 @@ class DatabaseTest extends TestCase
         $this->assertSame('phpunit_test_rest', $database->name);
         $this->assertSame('Test database', $database->description);
     }
+
+    /** @test */
+    public function canCopyDatabase()
+    {
+        $this->useMock(null, 201, ['X-Created' => ['100']]);
+        $database = $this->client->database->copy(1,'phpunit test rest copy');
+        $this->assertInstanceOf(Database::class, $database);
+        $this->assertSame(100, $database->ID);
+        $this->assertSame('phpunit_test_rest_copy', $database->name);
+    }
+
 }

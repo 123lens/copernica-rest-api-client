@@ -94,4 +94,33 @@ class Database extends BaseEndpoint
             'ID' => $response
         ], $data->toArray()));
     }
+
+    public function copy(int $id, string $name, array $options = [])
+    {
+        // stel de opties voor de kopie in
+        $options = array_merge([
+            'collections'   =>  true,
+            'miniviews'     =>  true,
+            'views'         =>  true,
+            'profiles'      =>  true,
+            'subprofiles'   =>  true
+        ], $options);
+
+        $data = collect([
+            'name' => Str::slug($name, '_'),
+            'options' => $options
+        ])->reject(function ($value) {
+            return empty($value);
+        });
+
+        $response = $this->performApiCall(
+            'POST',
+            "database/{$id}/copy",
+            $data->toJson()
+        );
+
+        return new DatabaseResource(array_merge([
+            'ID' => $response
+        ], $data->toArray()));
+    }
 }
