@@ -2,6 +2,7 @@
 namespace Budgetlens\CopernicaRestApi\Endpoints;
 
 use Budgetlens\CopernicaRestApi\Resources\Database as DatabaseResource;
+use Budgetlens\CopernicaRestApi\Resources\Database\UnsubscribeBehaviour;
 use Budgetlens\CopernicaRestApi\Resources\PaginatedResult;
 use Budgetlens\CopernicaRestApi\Support\Str;
 use Illuminate\Support\Collection;
@@ -152,5 +153,15 @@ class Database extends BaseEndpoint
             "database/{$id}",
             $data->toJson()
         );
+    }
+
+    public function getUnsubscribeBehaviour(int $id): UnsubscribeBehaviour
+    {
+        $response = $this->performApiCall(
+            'GET',
+            "database/{$id}/unsubscribe"
+        );
+
+        return new UnsubscribeBehaviour(collect($response));
     }
 }

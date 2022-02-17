@@ -1,0 +1,10 @@
+{
+  "behavior":"update",
+  "fields":{
+    "newsletter":"0",
+    "optin_common":"no",
+    "optin_birthday":"no",
+    "optin_service":"no",
+    "optin_product":"no"
+  }
+}

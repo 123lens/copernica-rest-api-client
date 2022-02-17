@@ -84,4 +84,30 @@ class DatabaseTest extends TestCase
         $result = $this->client->database->update($id, 'updated name asd', 'some description');
         $this->assertTrue($result);
     }
+
+    /** @test */
+    public function canRetrieveUnsubscribeBehaviourDelete()
+    {
+        $this->useMock('200-get-unsubscribe-behaviour-delete.json');
+        $id = 1;
+        $response = $this->client->database->getUnsubscribeBehaviour($id);
+        $this->assertInstanceOf(Database\UnsubscribeBehaviour::class, $response);
+        $this->assertSame('remove', $response->behavior);
+    }
+
+    /** @test */
+    public function canRetrieveUnsubscribeBehaviourUpdate()
+    {
+        $this->useMock('200-get-unsubscribe-behaviour-update.json');
+        $id = 1;
+        $response = $this->client->database->getUnsubscribeBehaviour($id);
+        $this->assertInstanceOf(Database\UnsubscribeBehaviour::class, $response);
+        $this->assertSame('update', $response->behavior);
+        $this->assertInstanceOf(Collection::class, $response->fields);
+        $this->assertSame('0', $response->fields->get('newsletter'));
+        $this->assertSame('no', $response->fields->get('optin_common'));
+        $this->assertSame('no', $response->fields->get('optin_birthday'));
+        $this->assertSame('no', $response->fields->get('optin_service'));
+        $this->assertSame('no', $response->fields->get('optin_product'));
+    }
 }
