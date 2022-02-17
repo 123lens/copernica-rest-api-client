@@ -1,0 +1,9 @@
+{
+  "emails":1,
+  "texts":2,
+  "fax":3,
+  "webpages":4,
+  "apicalls":5,
+  "litmustests":6,
+  "twofiftyoktests":7
+}
