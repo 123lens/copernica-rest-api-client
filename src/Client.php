@@ -3,6 +3,7 @@ namespace Budgetlens\CopernicaRestApi;
 
 use Budgetlens\CopernicaRestApi\Contracts\Config;
 use Budgetlens\CopernicaRestApi\Endpoints\Account;
+use Budgetlens\CopernicaRestApi\Endpoints\Database;
 use Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException;
 use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client as HttpClient;
@@ -31,6 +32,8 @@ class Client
     /** @var Account */
     public $account;
 
+    /** @var Database */
+    public $database;
 
     public function __construct(string $accessToken)
     {
@@ -71,6 +74,7 @@ class Client
     public function initializeEndpoints(): void
     {
         $this->account = new Account($this);
+        $this->database = new Database($this);
     }
 
     /**
