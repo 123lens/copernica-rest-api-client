@@ -36,9 +36,8 @@ abstract class TestCase extends BaseTestCase
     }
 
 
-    protected function useMock($file, $status = 200, $header = null)
+    protected function useMock($file = null, $status = 200, $header = null)
     {
-
         // set mock client
         $mockHandler = new MockHandler();
         $client = new \GuzzleHttp\Client([
@@ -47,7 +46,7 @@ abstract class TestCase extends BaseTestCase
         $mockHandler->append(new Response(
             $status,
             $header ?? $this->defaultResponseHeader,
-            $this->getMockfile($file)
+            !is_null($file) ? $this->getMockfile($file) : null
         ));
         $this->client->setClient($client);
     }

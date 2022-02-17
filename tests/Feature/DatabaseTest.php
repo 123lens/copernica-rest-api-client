@@ -35,4 +35,16 @@ class DatabaseTest extends TestCase
         $this->assertCount(2, $database->fields->data);
         $this->assertInstanceOf(Database\Field::class, $database->fields->data->first());
     }
+
+    /** @test */
+    public function canCreateDatabase()
+    {
+        $this->useMock(null, 201, ['X-Created' => ['100']]);
+
+        $database = $this->client->database->create('phpunit test rest', 'Test database');
+        $this->assertInstanceOf(Database::class, $database);
+        $this->assertSame(100, $database->ID);
+        $this->assertSame('phpunit_test_rest', $database->name);
+        $this->assertSame('Test database', $database->description);
+    }
 }
