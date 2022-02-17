@@ -110,4 +110,13 @@ class DatabaseTest extends TestCase
         $this->assertSame('no', $response->fields->get('optin_service'));
         $this->assertSame('no', $response->fields->get('optin_product'));
     }
+
+    /** @test */
+    public function canUpdateUnsubscribeBehaviour()
+    {
+        $this->useMock(null, 204);
+        $id = -1;
+        $response = $this->client->database->updateUnsubscribeBehaviour($id, 'remove');
+        $this->assertTrue($response);
+    }
 }

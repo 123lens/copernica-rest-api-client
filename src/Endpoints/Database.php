@@ -194,4 +194,30 @@ class Database extends BaseEndpoint
 
         return new UnsubscribeBehaviour(collect($response));
     }
+
+    /**
+     * Update unsubscribe behaviour
+     * @param int $id
+     * @param string $behaviour
+     * @param array $fields
+     * @return bool
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function updateUnsubscribeBehaviour(int $id, string $behaviour, array $fields = []): bool
+    {
+        $data = collect([
+            'behaviour' => $behaviour,
+            'fields' => $fields
+        ])->reject(function ($value) {
+            return empty($value) ||
+                (is_array($value) && !count($value));
+        });
+
+        return $this->performApiCall(
+            'PUT',
+            "database/{$id}/unsubscribe",
+            $data->toJson()
+        );
+    }
 }
