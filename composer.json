@@ -1,6 +1,6 @@
 {
     "name": "budgetlens/copernica-rest-api-client",
-    "version": "5.0.2",
+    "version": "3.0.0",
     "description": "Copernica Rest API client",
     "keywords": [
         "copernica",
