@@ -2,6 +2,7 @@
 namespace Budgetlens\CopernicaRestApi;
 
 use Budgetlens\CopernicaRestApi\Contracts\Config;
+use Budgetlens\CopernicaRestApi\Endpoints\Account;
 use Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException;
 use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client as HttpClient;
@@ -27,12 +28,29 @@ class Client
     /** @var string */
     private $access_token;
 
+    /** @var Account */
+    public $account;
+
+
     public function __construct(string $accessToken)
     {
         $this->access_token = $accessToken;
 
         // initialize available endpoints
         $this->initializeEndpoints();
+    }
+
+    /**
+     * Get Config
+     * @return Config
+     */
+    public function getConfig(): Config
+    {
+        if (is_null($this->config)) {
+            $this->config = new ApiConfig();
+        }
+
+        return $this->config;
     }
 
     /**
@@ -52,6 +70,7 @@ class Client
      */
     public function initializeEndpoints(): void
     {
+        $this->account = new Account($this);
     }
 
     /**
@@ -72,14 +91,14 @@ class Client
         if (is_null($this->httpClient)) {
             $stack = HandlerStack::create();
 
-            foreach ($this->config->getMiddleware() as $middlware) {
+            foreach ($this->getConfig()->getMiddleware() as $middlware) {
                 $stack->push($middlware);
             }
 
             $client = new HttpClient([
                 RequestOptions::VERIFY => CaBundle::getBundledCaBundlePath(),
                 'handler' => $stack,
-                'timeout' => $this->config->getTimeout(),
+                'timeout' => $this->getConfig()->getTimeout(),
             ]);
 
             $this->setClient($client);
@@ -94,7 +113,7 @@ class Client
      */
     private function getUserAgent(): string
     {
-        $agent = $this->config->getUserAgent();
+        $agent = $this->getConfig()->getUserAgent();
 
         return $agent !== '' ? $agent : self::USER_AGENT;
     }
@@ -131,6 +150,7 @@ class Client
         try {
             $response = $this->getClient()->send($request, ['http_errors' => false, 'debug' => false]);
 
+
             if (!$response) {
                 throw new CopernicaApiException('No API response received.');
             }
@@ -161,6 +181,6 @@ class Client
             $apiMethod .= "&{$arguments}";
         }
 
-        return "{$this->config->getEndpoint()}/{$apiMethod}";
+        return "{$this->getConfig()->getEndpoint()}/{$apiMethod}";
     }
 }
