@@ -12,6 +12,18 @@ abstract class BaseResource implements Arrayable, Jsonable, JsonSerializable
     use HasAttributes;
 
     /**
+     * Force ID Field to be int
+     * @param $value
+     * @return $this
+     */
+    public function setIDAttribute($value): self
+    {
+        $this->ID = (int) $value;
+
+        return $this;
+    }
+
+    /**
      * BaseResource constructor.
      * @param array $attributes
      */
