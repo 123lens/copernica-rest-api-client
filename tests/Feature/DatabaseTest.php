@@ -76,4 +76,12 @@ class DatabaseTest extends TestCase
         $this->assertSame('phpunit_test_rest_copy', $database->name);
     }
 
+    /** @test */
+    public function canUpdateDatabase()
+    {
+        $this->useMock(null, 204);
+        $id = -1;
+        $result = $this->client->database->update($id, 'updated name asd', 'some description');
+        $this->assertTrue($result);
+    }
 }

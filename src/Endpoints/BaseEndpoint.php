@@ -69,6 +69,11 @@ abstract class BaseEndpoint
             return collect($response->getHeader('X-Created'))->first();
         }
 
+        // PUT response.
+        if (strtoupper($httpMethod === 'PUT') && $response->getStatusCode() === 204) {
+            return true;
+        }
+
         $directResponseHeaders = [
         ];
 
@@ -77,6 +82,7 @@ abstract class BaseEndpoint
         }
 
         $body = $response->getBody()->getContents();
+        die($response->getStatusCode());
 
         if (empty($body)) {
             if ($response->getStatusCode() === Client::HTTP_STATUS_NO_CONTENT) {

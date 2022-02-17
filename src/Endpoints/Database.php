@@ -123,4 +123,34 @@ class Database extends BaseEndpoint
             'ID' => $response
         ], $data->toArray()));
     }
+
+    public function update(
+        int $id,
+        string $name = null,
+        string $description = null,
+        bool $archived = null,
+        \DateTime $created = null,
+        array $fields = [],
+        array $interests   = [],
+        array $collections = []
+    ): bool {
+        $data = collect([
+            'name' => Str::slug($name, '_'),
+            'description' => $description,
+            'archived' => $archived,
+            'created' => $created,
+            'fields' => $fields,
+            'interests' => $interests,
+            'collections' => $collections
+        ])->reject(function ($value) {
+            return empty($value) ||
+                (is_array($value) && !count($value));
+        });
+
+        return $this->performApiCall(
+            'PUT',
+            "database/{$id}",
+            $data->toJson()
+        );
+    }
 }
