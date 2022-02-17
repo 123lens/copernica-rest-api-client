@@ -25,11 +25,11 @@ class Client
     protected $httpClient;
 
     /** @var string */
-    private $token;
+    private $access_token;
 
-    public function __construct(string $token)
+    public function __construct(string $accessToken)
     {
-        $this->token = $token;
+        $this->access_token = $accessToken;
 
         // initialize available endpoints
         $this->initializeEndpoints();
@@ -123,7 +123,7 @@ class Client
 
         $request = new Request(
             $httpMethod,
-            "{$this->config->getEndpoint()}/{$apiMethod}",
+            $this->endpoint($apiMethod),
             $headers,
             $httpBody
         );
@@ -139,5 +139,28 @@ class Client
         } catch (GuzzleException $e) {
             throw new CopernicaRestApi($e->getMessage(), $e->getCode());
         }
+    }
+
+    /**
+     * Format endpoint with access token
+     *
+     * @param string $apiMethod
+     * @return string
+     */
+    private function endpoint(string $apiMethod): string
+    {
+        $arguments = null;
+
+        if (strpos($apiMethod, "?")) {
+            // arguments
+            list ($apiMethod, $arguments) = explode("?", $apiMethod);
+        }
+        // append access token.
+        $apiMethod .= "?access_token={$this->access_token}";
+        if (!is_null($arguments)) {
+            $apiMethod .= "&{$arguments}";
+        }
+
+        return "{$this->config->getEndpoint()}/{$apiMethod}";
     }
 }
