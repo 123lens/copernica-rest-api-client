@@ -49,6 +49,23 @@ class Database extends BaseEndpoint
     }
 
     /**
+     * Get Database Details
+     * @param int $id
+     * @return DatabaseResource
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function get(int $id): DatabaseResource
+    {
+        $response = $this->performApiCall(
+            'GET',
+            "database/{$id}"
+        );
+
+        return new DatabaseResource(collect($response));
+    }
+
+    /**
      * Create new database
      * @param string $name
      * @param string $description
