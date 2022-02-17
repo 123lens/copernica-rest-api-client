@@ -62,10 +62,6 @@ abstract class BaseEndpoint
             $retryAfter = collect($response->getHeader('Retry-After'))->first();
             throw new RateLimitException($retryAfter);
         }
-        // error handling
-        if ($response->getStatusCode() >= 400) {
-            throw new CopernicaApiException($response->getBody());
-        }
 
         $directResponseHeaders = [
         ];
@@ -89,6 +85,20 @@ abstract class BaseEndpoint
         if (json_last_error() != JSON_ERROR_NONE) {
             throw new CopernicaApiException("Unable to decode response: '{$body}'.");
         }
+
+        // error handling
+        if ($response->getStatusCode() >= 400) {
+            $messageBag = collect('Error executing API call');
+
+            $error = collect($object->error ?? []);
+
+            if ($error->has('message')) {
+                $messageBag->push(': ' . $error->get('message'));
+            }
+
+            throw new CopernicaApiException($messageBag->implode(' '), $response->getStatusCode());
+        }
+
 
         return $object;
     }
