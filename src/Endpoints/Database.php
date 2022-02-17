@@ -96,6 +96,15 @@ class Database extends BaseEndpoint
         ], $data->toArray()));
     }
 
+    /**
+     * Copy database
+     * @param int $id
+     * @param string $name
+     * @param array $options
+     * @return DatabaseResource
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function copy(int $id, string $name, array $options = [])
     {
         // stel de opties voor de kopie in
@@ -125,6 +134,20 @@ class Database extends BaseEndpoint
         ], $data->toArray()));
     }
 
+    /**
+     * Update database information
+     * @param int $id
+     * @param string|null $name
+     * @param string|null $description
+     * @param bool|null $archived
+     * @param \DateTime|null $created
+     * @param array $fields
+     * @param array $interests
+     * @param array $collections
+     * @return bool
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function update(
         int $id,
         string $name = null,
@@ -155,6 +178,13 @@ class Database extends BaseEndpoint
         );
     }
 
+    /**
+     * Get Database Unsubscribe Behaviour
+     * @param int $id
+     * @return UnsubscribeBehaviour
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function getUnsubscribeBehaviour(int $id): UnsubscribeBehaviour
     {
         $response = $this->performApiCall(
