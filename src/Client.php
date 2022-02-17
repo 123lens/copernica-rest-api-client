@@ -1,0 +1,143 @@
+<?php
+namespace Budgetlens\CopernicaRestApi;
+
+use Budgetlens\CopernicaRestApi\Contracts\Config;
+use Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException;
+use Composer\CaBundle\CaBundle;
+use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\ResponseInterface;
+
+class Client
+{
+    const HTTP_STATUS_NO_CONTENT = 204;
+
+    const USER_AGENT = "Budgetlens/CopernicaRestApi/V3.0.0";
+
+    /** @var Config  */
+    protected $config;
+
+    /** @var \GuzzleHttp\Client */
+    protected $httpClient;
+
+    /** @var string */
+    private $token;
+
+    public function __construct(string $token)
+    {
+        $this->token = $token;
+
+        // initialize available endpoints
+        $this->initializeEndpoints();
+    }
+
+    /**
+     * Set (custom) config
+     * @param Config $config
+     * @return $this
+     */
+    public function setConfig(Config $config): self
+    {
+        $this->config = $config;
+
+        return $this;
+    }
+
+    /**
+     * Initialize available endpoints
+     */
+    public function initializeEndpoints(): void
+    {
+    }
+
+    /**
+     * Set Client
+     * @param ClientInterface $client
+     */
+    public function setClient(ClientInterface $client)
+    {
+        $this->httpClient = $client;
+    }
+
+    /**
+     * Get Client
+     * @return ClientInterface
+     */
+    public function getClient(): ClientInterface
+    {
+        if (is_null($this->httpClient)) {
+            $stack = HandlerStack::create();
+
+            foreach ($this->config->getMiddleware() as $middlware) {
+                $stack->push($middlware);
+            }
+
+            $client = new HttpClient([
+                RequestOptions::VERIFY => CaBundle::getBundledCaBundlePath(),
+                'handler' => $stack,
+                'timeout' => $this->config->getTimeout(),
+            ]);
+
+            $this->setClient($client);
+        }
+
+        return $this->httpClient;
+    }
+
+    /**
+     * Retrieve User Agent
+     * @return string
+     */
+    private function getUserAgent(): string
+    {
+        $agent = $this->config->getUserAgent();
+
+        return $agent !== '' ? $agent : self::USER_AGENT;
+    }
+
+    /**
+     * @param string $httpMethod
+     * @param string $apiMethod
+     * @param string|null $httpBody
+     * @param array $requestHeaders
+     * @return ResponseInterface
+     * @throws CopernicaApiException
+     */
+    public function performHttpCall(
+        string $httpMethod,
+        string $apiMethod,
+        ?string $httpBody = null,
+        array $requestHeaders = []
+    ): ResponseInterface {
+        $headers = collect([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'User-Agent' => $this->getUserAgent()
+        ])
+            ->merge($requestHeaders)
+            ->all();
+
+        $request = new Request(
+            $httpMethod,
+            "{$this->config->getEndpoint()}/{$apiMethod}",
+            $headers,
+            $httpBody
+        );
+
+        try {
+            $response = $this->getClient()->send($request, ['http_errors' => false, 'debug' => false]);
+
+            if (!$response) {
+                throw new CopernicaApiException('No API response received.');
+            }
+
+            return $response;
+        } catch (GuzzleException $e) {
+            throw new CopernicaRestApi($e->getMessage(), $e->getCode());
+        }
+    }
+}
