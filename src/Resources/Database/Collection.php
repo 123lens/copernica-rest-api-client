@@ -9,7 +9,18 @@ class Collection extends BaseResource
 {
     use HasFields, HasIntentions;
 
-    public $ID;
-    public $name;
-    public $database;
+    public int $ID;
+    public string $name;
+    public int $database;
+
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setDatabaseAttribute($value): self
+    {
+        $this->database = (int) $value;
+
+        return $this;
+    }
 }

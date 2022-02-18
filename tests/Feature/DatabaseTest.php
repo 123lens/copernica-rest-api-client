@@ -152,4 +152,23 @@ class DatabaseTest extends TestCase
         $this->assertSame('selection_name', $response->name);
         $this->assertSame('unit test', $response->description);
     }
+
+    /** @test */
+    public function canListCollections()
+    {
+        $this->useMock('200-get-database-collections.json');
+        $id = 1;
+        $response = $this->client->database->getCollections($id);
+        $this->assertInstanceOf(PaginatedResult::class, $response);
+        $this->assertCount(2, $response->data);
+        $this->assertInstanceOf(Database\Collection::class, $response->data->first());
+        $this->assertSame(1, $response->data->first()->ID);
+        $this->assertSame('Collection 1', $response->data->first()->name);
+        $this->assertSame(1, $response->data->first()->database);
+        $this->assertInstanceOf(PaginatedResult::class, $response->data->first()->fields);
+        $this->assertCount(2, $response->data->first()->fields->data);
+        $this->assertInstanceOf(Database\Field::class, $response->data->first()->fields->data->first());
+        $this->assertSame(1, $response->data->first()->fields->data->first()->ID);
+        $this->assertInstanceOf(Database\Intentions::class, $response->data->first()->intentions);
+    }
 }
