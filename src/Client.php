@@ -5,6 +5,7 @@ use Budgetlens\CopernicaRestApi\Contracts\Config;
 use Budgetlens\CopernicaRestApi\Endpoints\Account;
 use Budgetlens\CopernicaRestApi\Endpoints\Database;
 use Budgetlens\CopernicaRestApi\Endpoints\Interest;
+use Budgetlens\CopernicaRestApi\Endpoints\Profile;
 use Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException;
 use Composer\CaBundle\CaBundle;
 use GuzzleHttp\Client as HttpClient;
@@ -38,6 +39,9 @@ class Client
 
     /** @var Interest */
     public $interest;
+
+    /** @var Profile */
+    public $profile;
 
     public function __construct(string $accessToken)
     {
@@ -80,6 +84,7 @@ class Client
         $this->account = new Account($this);
         $this->database = new Database($this);
         $this->interest = new Interest($this);
+        $thos->profile = new Profile($this);
     }
 
     /**
