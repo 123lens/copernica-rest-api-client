@@ -14,7 +14,7 @@ class AccountTest extends TestCase
 
         $identity = $this->client->account->identity();
         $this->assertInstanceOf(Identity::class, $identity);
-        $this->assertSame('1', $identity->id);
+        $this->assertSame(1, $identity->ID);
         $this->assertSame('unit test', $identity->name);
         $this->assertSame('Description', $identity->description);
         $this->assertSame('PHP Unit Test', $identity->company);

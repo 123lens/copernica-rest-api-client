@@ -1,0 +1,47 @@
+{
+  "start":0,
+  "limit":2,
+  "count":2,
+  "data":[
+    {
+      "ID":"1",
+      "fields":{
+        "field1":"field1",
+        "field2":"field2",
+        "field3":"field3"
+      },
+      "interests":[
+        "optin_common",
+        "optin_birthday",
+        "optin_service",
+        "optin_product"
+      ],
+      "database":"1",
+      "secret":"secret1",
+      "created":"2013-06-12 21:04:22",
+      "modified":"2022-01-10 02:10:03",
+      "removed":false
+    },
+    {
+      "ID":"2",
+      "fields":{
+        "field1":"field1",
+        "field2":"field2",
+        "field3":"field3"
+      },
+      "interests":[
+        "optin_common",
+        "optin_birthday",
+        "optin_service",
+        "optin_product"
+      ],
+      "database":"1",
+      "secret":"secret2",
+      "created":"2013-06-12 21:04:22",
+      "modified":"2022-01-10 02:10:03",
+      "removed":false
+    }
+  ],
+  "nextid":3,
+  "total":100
+}

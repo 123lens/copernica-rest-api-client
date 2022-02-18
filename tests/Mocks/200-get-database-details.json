@@ -1,0 +1,61 @@
+{
+  "ID": "1",
+  "name": "PHPUnit_Test_Archived",
+  "description": "Database 1",
+  "archived": true,
+  "created": "2014-06-06 08:21:11",
+  "fields": {
+    "start": 0,
+    "limit": 1000,
+    "count": 2,
+    "data": [
+      {
+        "ID": "1",
+        "name": "companyname",
+        "type": "text",
+        "value": "",
+        "displayed": false,
+        "ordered": false,
+        "length": "200",
+        "textlines": "1",
+        "hidden": false,
+        "index": false
+      },
+      {
+        "ID": "2",
+        "name": "aanhef",
+        "type": "text",
+        "value": "",
+        "displayed": false,
+        "ordered": false,
+        "length": "50",
+        "textlines": "1",
+        "hidden": false,
+        "index": false
+      }
+    ],
+    "total": 2
+  },
+  "interests": {
+    "start": 0,
+    "limit": 1000,
+    "count": 0,
+    "data": [
+    ],
+    "total": 0
+  },
+  "collections": {
+    "start": 0,
+    "limit": 1000,
+    "count": 0,
+    "data": [
+    ],
+    "total": 0
+  },
+  "intentions": {
+    "email": false,
+    "sms": false,
+    "fax": false,
+    "pdf": false
+  }
+}

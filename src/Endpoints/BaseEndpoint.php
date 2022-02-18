@@ -6,6 +6,7 @@ use Budgetlens\CopernicaRestApi\Client;
 use Budgetlens\CopernicaRestApi\Support\Uri;
 use Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException;
 use Budgetlens\CopernicaRestApi\Exceptions\RateLimitException;
+use Illuminate\Support\Collection;
 
 abstract class BaseEndpoint
 {
@@ -21,6 +22,24 @@ abstract class BaseEndpoint
 
     protected function boot(): void
     {
+    }
+
+    /**
+     * Paginate filter
+     * @param int $start
+     * @param int $limit
+     * @param bool $calculateTotal
+     * @return Collection
+     */
+    public function paginateFilter(int $start = 0, int $limit = 1000, bool $calculateTotal = false): Collection
+    {
+        return collect([
+            'start' => $start,
+            'limit' => $limit,
+            'total' => $calculateTotal
+        ])->reject(function ($value) {
+            return empty($value);
+        });
     }
 
     /**
@@ -61,6 +80,19 @@ abstract class BaseEndpoint
         if ($response->getStatusCode() === 429) {
             $retryAfter = collect($response->getHeader('Retry-After'))->first();
             throw new RateLimitException($retryAfter);
+        }
+
+        // recevied an "X-Created" header?
+        if ($response->hasHeader('X-Created')) {
+            // return created ID
+            return (int) collect($response->getHeader('X-Created'))->first();
+        }
+
+        // PUT response.
+        if ((strtoupper($httpMethod === 'PUT') || strtoupper($httpMethod) === 'DELETE')
+            && $response->getStatusCode() === 204
+        ) {
+            return true;
         }
 
         $directResponseHeaders = [
