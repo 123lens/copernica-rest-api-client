@@ -1,0 +1,24 @@
+{
+  "start":0,
+  "limit":1000,
+  "count":1,
+  "data":[
+    {
+      "ID":"1",
+      "fields":{
+        "sex":"M",
+        "surname":"jansen",
+        "zipcode":"1000AA",
+        "city": "City"
+      },
+      "interests":[
+      ],
+      "database":"1",
+      "secret":"secret1",
+      "created":"2018-07-01 18:45:08",
+      "modified":"2019-03-05 10:54:47",
+      "removed":false
+    }
+  ],
+  "total":1
+}

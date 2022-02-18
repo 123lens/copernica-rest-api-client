@@ -6,6 +6,7 @@ use Budgetlens\CopernicaRestApi\Resources\Database as DatabaseResource;
 use Budgetlens\CopernicaRestApi\Resources\Database\UnsubscribeBehaviour;
 use Budgetlens\CopernicaRestApi\Resources\PaginatedResult;
 use Budgetlens\CopernicaRestApi\Resources\Profile;
+use Budgetlens\CopernicaRestApi\Support\FieldFilter;
 use Budgetlens\CopernicaRestApi\Support\Str;
 use Illuminate\Support\Collection;
 
@@ -590,17 +591,35 @@ class Database extends BaseEndpoint
         return collect($response);
     }
 
+    /**
+     * Get Profiles
+     * @param int $id
+     * @param int $start
+     * @param int $limit
+     * @param bool $calculateTotal
+     * @param string|null $fields
+     * @param string|null $orderBy
+     * @param string|null $orderDirection
+     * @param bool|null $dataOnly
+     * @return PaginatedResult
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function getProfiles(
         int $id,
         int $start = 0,
         int $limit = 1000,
         bool $calculateTotal  = false,
-        string $fields = null,
+        FieldFilter $fields = null,
         string $orderBy = null,
         string $orderDirection = null,
         bool $dataOnly = null
     ): PaginatedResult {
-        $parameters = $this->paginateFilter($start, $limit, $calculateTotal);
+        $pagination = $this->paginateFilter($start, $limit, $calculateTotal);
+
+        $parameters = collect(array_merge($pagination->all(), [
+            'fields[]' => !is_null($fields) ? $fields->toArray() : null
+        ]));
 
         $response = $this->performApiCall(
             'GET',

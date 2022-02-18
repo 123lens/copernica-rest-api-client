@@ -7,6 +7,7 @@ use Budgetlens\CopernicaRestApi\Resources\Account\Identity;
 use Budgetlens\CopernicaRestApi\Resources\Database;
 use Budgetlens\CopernicaRestApi\Resources\PaginatedResult;
 use Budgetlens\CopernicaRestApi\Resources\Profile;
+use Budgetlens\CopernicaRestApi\Support\FieldFilter;
 use Budgetlens\CopernicaRestApi\Tests\TestCase;
 use Illuminate\Support\Collection;
 
@@ -343,6 +344,33 @@ class DatabaseTest extends TestCase
         $this->assertSame('field2', $response->data->first()->fields->get('field2'));
         $this->assertInstanceOf(Collection::class, $response->data->first()->interests);
         $this->assertInstanceOf(Database\Interest::class, $response->data->first()->interests->first());
+        $this->assertSame(1, $response->data->first()->database);
+        $this->assertSame('secret1', $response->data->first()->secret);
+        $this->assertInstanceOf(\DateTime::class, $response->data->first()->created);
+        $this->assertInstanceOf(\DateTime::class, $response->data->first()->modified);
+        $this->assertFalse($response->data->first()->removed);
+    }
+
+    /** @test */
+    public function canListProfilesFilterd()
+    {
+        $this->useMock('200-get-database-profiles-filterd.json');
+        $id = 5;
+        // build filters.
+        $filter = new FieldFilter();
+        $filter->add('sex', 'M');
+        $filter->like('surname', 'jans');
+        $filter->like('zipcode', '1000', 'after');
+        $response = $this->client->database->getProfiles($id, fields: $filter);
+        $this->assertInstanceOf(PaginatedResult::class, $response);
+        $this->assertInstanceOf(Profile::class, $response->data->first());
+        $this->assertSame(1, $response->data->first()->ID);
+        $this->assertInstanceOf(Collection::class, $response->data->first()->fields);
+        $this->assertSame('M', $response->data->first()->fields->get('sex'));
+        $this->assertSame('jansen', $response->data->first()->fields->get('surname'));
+        $this->assertSame('1000AA', $response->data->first()->fields->get('zipcode'));
+        $this->assertSame('City', $response->data->first()->fields->get('city'));
+        $this->assertInstanceOf(Collection::class, $response->data->first()->interests);
         $this->assertSame(1, $response->data->first()->database);
         $this->assertSame('secret1', $response->data->first()->secret);
         $this->assertInstanceOf(\DateTime::class, $response->data->first()->created);
