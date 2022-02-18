@@ -1,0 +1,44 @@
+{
+  "start":0,
+  "limit":1000,
+  "count":2,
+  "data":[
+    {
+      "ID":"2",
+      "name":"Selection1",
+      "description":"description 1",
+      "parent-type":"database",
+      "parent-id":"1",
+      "has-children":false,
+      "has-referred":false,
+      "has-rules":true,
+      "database":"8",
+      "last-built":"2022-02-18 00:51:23",
+      "intentions":{
+        "email":true,
+        "sms":false,
+        "fax":false,
+        "pdf":false
+      }
+    },
+    {
+      "ID":"3",
+      "name":"selection 2",
+      "description":"description 2",
+      "parent-type":"database",
+      "parent-id":"1",
+      "has-children":false,
+      "has-referred":false,
+      "has-rules":true,
+      "database":"8",
+      "last-built":"2022-02-18 00:49:12",
+      "intentions":{
+        "email":false,
+        "sms":false,
+        "fax":false,
+        "pdf":false
+      }
+    }
+  ],
+  "total":2
+}

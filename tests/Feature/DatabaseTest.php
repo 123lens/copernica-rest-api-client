@@ -32,6 +32,7 @@ class DatabaseTest extends TestCase
         $this->assertInstanceOf(\DateTime::class, $database->created);
         $this->assertInstanceOf(PaginatedResult::class, $database->fields);
         $this->assertInstanceOf(Collection::class, $database->fields->data);
+        $this->assertInstanceOf(Database\Intentions::class, $database->intentions);
         $this->assertCount(2, $database->fields->data);
         $this->assertInstanceOf(Database\Field::class, $database->fields->data->first());
     }
@@ -50,6 +51,7 @@ class DatabaseTest extends TestCase
         $this->assertInstanceOf(\DateTime::class, $database->created);
         $this->assertInstanceOf(PaginatedResult::class, $database->fields);
         $this->assertInstanceOf(Collection::class, $database->fields->data);
+        $this->assertInstanceOf(Database\Intentions::class, $database->intentions);
         $this->assertCount(2, $database->fields->data);
         $this->assertInstanceOf(Database\Field::class, $database->fields->data->first());
     }
@@ -118,5 +120,25 @@ class DatabaseTest extends TestCase
         $id = -1;
         $response = $this->client->database->updateUnsubscribeBehaviour($id, 'remove');
         $this->assertTrue($response);
+    }
+
+    /** @test */
+    public function canListSelections()
+    {
+        $this->useMock('200-get-database-selections.json');
+        $id = 1;
+        $response = $this->client->database->getSelections($id);
+        $this->assertInstanceOf(PaginatedResult::class, $response);
+        $this->assertCount(2, $response->data);
+        $this->assertInstanceOf(Database\Selection::class, $response->data->first());
+        $this->assertSame(2, $response->data->first()->ID);
+        $this->assertSame('Selection1', $response->data->first()->name);
+        $this->assertSame('description 1', $response->data->first()->description);
+        $this->assertSame(1, $response->data->first()->parentId);
+        $this->assertFalse($response->data->first()->hasChildren);
+        $this->assertFalse($response->data->first()->hasReferred);
+        $this->assertTrue($response->data->first()->hasRules);
+        $this->assertInstanceOf(\DateTime::class, $response->data->first()->lastBuilt);
+        $this->assertInstanceOf(Database\Intentions::class, $response->data->first()->intentions);
     }
 }

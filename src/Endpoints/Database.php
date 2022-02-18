@@ -13,18 +13,14 @@ class Database extends BaseEndpoint
      * List available databases
      * @param int $start
      * @param int $limit
+     * @param bool $calculateTotal
      * @return PaginatedResult
      * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
      * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
      */
-    public function list(int $start = 0, int $limit = 1000): PaginatedResult
+    public function list(int $start = 0, int $limit = 1000, bool $calculateTotal  = false): PaginatedResult
     {
-        $parameters = collect([
-            'start' => $start,
-            'limit' => $limit
-        ])->reject(function ($value) {
-            return empty($value);
-        });
+        $parameters = $this->paginateFilter($start, $limit, $calculateTotal);
 
         $response = $this->performApiCall(
             'GET',
@@ -44,7 +40,7 @@ class Database extends BaseEndpoint
         return new PaginatedResult([
             'start' => $response->start ?? 0,
             'limit' => $response->limit ?? 0,
-            'count' => $response->count ?? 0,
+            'count' => $calculateTotal ? ($response->count ?? 0) : null,
             'data' => $collection
         ]);
     }
@@ -219,5 +215,32 @@ class Database extends BaseEndpoint
             "database/{$id}/unsubscribe",
             $data->toJson()
         );
+    }
+
+    public function getSelections(int $id, int $start = 0, int $limit = 1000, bool $calculateTotal = false)
+    {
+        $parameters = $this->paginateFilter($start, $limit, $calculateTotal);
+
+        $response = $this->performApiCall(
+            'GET',
+            "database/{$id}/views" . $this->buildQueryString($parameters->all())
+        );
+
+        $items = $response->data ?? null;
+
+        $collection = new Collection();
+
+        if (!is_null($items)) {
+            collect($items)->each(function ($item) use ($collection) {
+                $collection->push(new DatabaseResource\Selection($item));
+            });
+        }
+
+        return new PaginatedResult([
+            'start' => $response->start ?? 0,
+            'limit' => $response->limit ?? 0,
+            'count' => $calculateTotal ? ($response->count ?? 0) : null,
+            'data' => $collection
+        ]);
     }
 }
