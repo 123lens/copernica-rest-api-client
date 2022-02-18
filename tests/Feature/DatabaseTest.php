@@ -3,8 +3,6 @@ namespace Budgetlens\CopernicaRestApi\Tests\Feature\Endpoints;
 
 use Budgetlens\CopernicaRestApi\Enum\FieldType;
 use Budgetlens\CopernicaRestApi\Exceptions\FilterUnknownOperatorException;
-use Budgetlens\CopernicaRestApi\Resources\Account\Consumption;
-use Budgetlens\CopernicaRestApi\Resources\Account\Identity;
 use Budgetlens\CopernicaRestApi\Resources\Database;
 use Budgetlens\CopernicaRestApi\Resources\PaginatedResult;
 use Budgetlens\CopernicaRestApi\Resources\Profile;
@@ -469,4 +467,13 @@ class DatabaseTest extends TestCase
         $this->assertTrue($response);
     }
 
+    /** @test */
+    public function canUpdateIntensions()
+    {
+        $this->markTestSkipped('Response from Copernica is invalid, till thet fix this response mark skipped');
+        $this->useMock(null, 204);
+        $id = 1;
+        $result = $this->client->database->updateIntentions($id, email: true);
+        $this->assertTrue($result);
+    }
 }

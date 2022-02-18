@@ -674,8 +674,40 @@ class Database extends BaseEndpoint
         ], $data->toArray()));
     }
 
-    public function updateProfile()
-    {
+    /**
+     * Update Intensions
+     *
+     * @todo: Always returns NULL???
+     * @param int $id
+     * @param bool $email
+     * @param bool $sms
+     * @param bool $fax
+     * @param bool $pdf
+     * @return bool
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function updateIntentions(
+        int $id,
+        bool $email = false,
+        bool $sms = false,
+        bool $fax = false,
+        bool $pdf = false
+    ): bool {
+        $data = collect([
+            'email' => $email,
+            'sms' => $sms,
+            'fax' => $fax,
+            'pdf' => $pdf
+        ])->reject(function ($value) {
+            return empty($value);
+        });
 
+        return $this->performApiCall(
+            'POST',
+            "database/{$id}/intentions",
+            $data->toJson()
+        );
     }
+
 }
