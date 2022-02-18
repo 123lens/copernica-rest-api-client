@@ -435,6 +435,22 @@ class Database extends BaseEndpoint
         ], $data->toArray()));
     }
 
+    /**
+     * @param int $databaseId
+     * @param int $id
+     * @param string $name
+     * @param FieldType|null $type
+     * @param mixed|null $value
+     * @param bool $displayed
+     * @param bool $ordered
+     * @param int $length
+     * @param int $textlines
+     * @param bool $hidden
+     * @param bool $index
+     * @return bool
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function updateField(
         int $databaseId,
         int $id,
@@ -467,6 +483,22 @@ class Database extends BaseEndpoint
             'PUT',
             "database/{$databaseId}/field/{$id}",
             $data->toJson()
+        );
+    }
+
+    /**
+     * Delete Database Field
+     * @param int $databaseId
+     * @param int $id
+     * @return bool
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function deleteField(int $databaseId, int $id): bool
+    {
+        return $this->performApiCall(
+            'DELETE',
+            "database/{$databaseId}/field/{$id}"
         );
     }
 }

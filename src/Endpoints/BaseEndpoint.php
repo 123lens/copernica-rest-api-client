@@ -89,7 +89,9 @@ abstract class BaseEndpoint
         }
 
         // PUT response.
-        if (strtoupper($httpMethod === 'PUT') && $response->getStatusCode() === 204) {
+        if ((strtoupper($httpMethod === 'PUT') || strtoupper($httpMethod) === 'DELETE')
+            && $response->getStatusCode() === 204
+        ) {
             return true;
         }
 

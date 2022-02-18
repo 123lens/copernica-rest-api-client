@@ -255,4 +255,15 @@ class DatabaseTest extends TestCase
         );
         $this->assertTrue($response);
     }
+
+    /** @test */
+    public function canDeleteField()
+    {
+        $this->useMock(null, 204);
+        $databaseId = -1;
+        $id = -1;
+
+        $response = $this->client->database->deleteField($databaseId, $id);
+        $this->assertTrue($response);
+    }
 }
