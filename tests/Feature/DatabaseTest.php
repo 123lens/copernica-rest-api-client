@@ -266,4 +266,19 @@ class DatabaseTest extends TestCase
         $response = $this->client->database->deleteField($databaseId, $id);
         $this->assertTrue($response);
     }
+
+    /** @test */
+    public function canListInterests()
+    {
+        $this->useMock('200-get-database-interests.json');
+        $id = 1;
+        $response = $this->client->database->getInterests($id);
+
+        $this->assertInstanceOf(PaginatedResult::class, $response);
+        $this->assertCount(4, $response->data);
+        $this->assertInstanceOf(Database\Interest::class, $response->data->first());
+        $this->assertSame(1, $response->data->first()->ID);
+        $this->assertSame('optin_common', $response->data->first()->name);
+        $this->assertSame('Newsletter', $response->data->first()->group);
+    }
 }

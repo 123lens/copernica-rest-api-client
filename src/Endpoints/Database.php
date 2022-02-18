@@ -501,4 +501,45 @@ class Database extends BaseEndpoint
             "database/{$databaseId}/field/{$id}"
         );
     }
+
+    /**
+     * Get Database Interests
+     * @param int $id
+     * @param int $start
+     * @param int $limit
+     * @param bool $calculateTotal
+     * @return PaginatedResult
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function getInterests(
+        int $id,
+        int $start = 0,
+        int $limit = 1000,
+        bool $calculateTotal  = false
+    ): PaginatedResult {
+        $parameters = $this->paginateFilter($start, $limit, $calculateTotal);
+
+        $response = $this->performApiCall(
+            'GET',
+            "database/{$id}/interests" . $this->buildQueryString($parameters->all())
+        );
+
+        $items = $response->data ?? null;
+
+        $collection = new Collection();
+
+        if (!is_null($items)) {
+            collect($items)->each(function ($item) use ($collection) {
+                $collection->push(new DatabaseResource\Interest($item));
+            });
+        }
+
+        return new PaginatedResult([
+            'start' => $response->start ?? 0,
+            'limit' => $response->limit ?? 0,
+            'count' => $calculateTotal ? ($response->count ?? 0) : null,
+            'data' => $collection
+        ]);
+    }
 }

@@ -5,7 +5,7 @@ use Budgetlens\CopernicaRestApi\Resources\BaseResource;
 
 class Interest extends BaseResource
 {
-    public $ID;
-    public $name;
-    public $group;
+    public int $ID;
+    public string $name;
+    public string $group;
 }

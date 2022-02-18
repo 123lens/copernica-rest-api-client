@@ -1,0 +1,28 @@
+{
+  "start":0,
+  "limit":1000,
+  "count":4,
+  "data":[
+    {
+      "ID":"1",
+      "name":"optin_common",
+      "group":"Newsletter"
+    },
+    {
+      "ID":"2",
+      "name":"optin_birthday",
+      "group":"Newsletter"
+    },
+    {
+      "ID":"3",
+      "name":"optin_service",
+      "group":"Newsletter"
+    },
+    {
+      "ID":"4",
+      "name":"optin_product",
+      "group":"Newsletter"
+    }
+  ],
+  "total":4
+}
