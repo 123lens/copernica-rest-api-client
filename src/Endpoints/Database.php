@@ -5,6 +5,7 @@ use Budgetlens\CopernicaRestApi\Enum\FieldType;
 use Budgetlens\CopernicaRestApi\Resources\Database as DatabaseResource;
 use Budgetlens\CopernicaRestApi\Resources\Database\UnsubscribeBehaviour;
 use Budgetlens\CopernicaRestApi\Resources\PaginatedResult;
+use Budgetlens\CopernicaRestApi\Resources\Profile;
 use Budgetlens\CopernicaRestApi\Support\Str;
 use Illuminate\Support\Collection;
 
@@ -570,5 +571,22 @@ class Database extends BaseEndpoint
         return new DatabaseResource\Interest(array_merge([
             'ID' => $response
         ], $data->toArray()));
+    }
+
+    /**
+     * Get Database Profile Ids
+     * @param int $id
+     * @return Collection
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function getProfileIds(int $id): Collection
+    {
+        $response = $this->performApiCall(
+            'GET',
+            "database/{$id}/profileids?limit=100q",
+        );
+
+        return collect($response);
     }
 }

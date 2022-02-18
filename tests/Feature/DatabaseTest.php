@@ -319,5 +319,12 @@ class DatabaseTest extends TestCase
         $this->assertTrue($response);
     }
 
-
+    /** @test */
+    public function canListProfileIds()
+    {
+        $this->useMock('200-get-database-profile-ids.json');
+        $id = 1;
+        $response = $this->client->database->getProfileIds($id);
+        $this->assertInstanceOf(Collection::class, $response);
+    }
 }
