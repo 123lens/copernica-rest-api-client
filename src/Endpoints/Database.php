@@ -328,4 +328,31 @@ class Database extends BaseEndpoint
             'data' => $collection
         ]);
     }
+
+    /**
+     * Create Database Collection
+     * @param int $id
+     * @param string $name
+     * @return Collection
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function createCollection(int $id, string $name): DatabaseResource\Collection
+    {
+        $data = collect([
+            'name' => Str::slug($name),
+        ])->reject(function ($value) {
+            return empty($value);
+        });
+
+        $response = $this->performApiCall(
+            'POST',
+            "database/{$id}/collections",
+            $data->toJson()
+        );
+
+        return new DatabaseResource\Collection(array_merge([
+            'ID' => $response
+        ], $data->toArray()));
+    }
 }

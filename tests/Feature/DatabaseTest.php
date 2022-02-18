@@ -171,4 +171,15 @@ class DatabaseTest extends TestCase
         $this->assertSame(1, $response->data->first()->fields->data->first()->ID);
         $this->assertInstanceOf(Database\Intentions::class, $response->data->first()->intentions);
     }
+
+    /** @test */
+    public function canCreateCollection()
+    {
+        $this->useMock(null, 201, ['X-Created' => ['100']]);
+        $id = 1;
+        $response = $this->client->database->createCollection($id, 'collection name');
+        $this->assertInstanceOf(Database\Collection::class, $response);
+        $this->assertSame(100, $response->ID);
+        $this->assertSame('collection_name', $response->name);
+    }
 }
