@@ -332,7 +332,6 @@ class DatabaseTest extends TestCase
     /** @test */
     public function canUpdateIntensions()
     {
-        $this->markTestSkipped('Response from Copernica is invalid, till thet fix this response mark skipped');
         $this->useMock(null, 204);
         $id = 1;
         $result = $this->client->database->updateIntentions($id, email: true);

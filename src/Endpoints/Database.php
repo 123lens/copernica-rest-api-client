@@ -595,7 +595,6 @@ class Database extends BaseEndpoint
     /**
      * Update Intensions
      *
-     * @todo: Always returns NULL???
      * @param int $id
      * @param bool $email
      * @param bool $sms
@@ -622,7 +621,7 @@ class Database extends BaseEndpoint
         });
 
         return $this->performApiCall(
-            'POST',
+            'PUT',
             "database/{$id}/intentions",
             $data->toJson()
         );
