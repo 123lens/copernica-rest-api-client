@@ -48,7 +48,7 @@ class Str
      * @param  string|null  $language
      * @return string
      */
-    public static function slug($title, $separator = '-', $language = 'en')
+    public static function slug($title, $separator = '_', $language = 'en')
     {
         // Convert all dashes/underscores into separator
         $flip = $separator === '-' ? '_' : '-';

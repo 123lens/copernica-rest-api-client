@@ -74,7 +74,7 @@ class Database extends BaseEndpoint
     public function create(string $name, string $description, bool $archived = false): DatabaseResource
     {
         $data = collect([
-            'name' => Str::slug($name, '_'),
+            'name' => Str::slug($name),
             'description' => $description,
             'archived' => $archived
         ])->reject(function ($value) {
@@ -113,7 +113,7 @@ class Database extends BaseEndpoint
         ], $options);
 
         $data = collect([
-            'name' => Str::slug($name, '_'),
+            'name' => Str::slug($name),
             'options' => $options
         ])->reject(function ($value) {
             return empty($value);
@@ -155,7 +155,7 @@ class Database extends BaseEndpoint
         array $collections = []
     ): bool {
         $data = collect([
-            'name' => Str::slug($name, '_'),
+            'name' => Str::slug($name),
             'description' => $description,
             'archived' => $archived,
             'created' => $created,
@@ -242,5 +242,24 @@ class Database extends BaseEndpoint
             'count' => $calculateTotal ? ($response->count ?? 0) : null,
             'data' => $collection
         ]);
+    }
+
+    public function createSelection(int $id, string $name, string $description): DatabaseResource\Selection {
+        $data = collect([
+            'name' => Str::slug($name),
+            'description' => $description,
+        ])->reject(function ($value) {
+            return empty($value);
+        });
+
+        $response = $this->performApiCall(
+            'POST',
+            "database/{$id}/views",
+            $data->toJson()
+        );
+
+        return new DatabaseResource\Selection(array_merge([
+            'ID' => $response
+        ], $data->toArray()));
     }
 }
