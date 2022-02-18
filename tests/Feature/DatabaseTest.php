@@ -240,4 +240,19 @@ class DatabaseTest extends TestCase
         $this->assertSame(100, $response->ID);
     }
 
+    /** @test */
+    public function canUpdateField()
+    {
+        $this->useMock(null, 204);
+
+        $databaseId = 1;
+        $id = 1;
+        $response = $this->client->database->updateField(
+            databaseId: $databaseId,
+            id: $id,
+            name: 'new name',
+            length: 25
+        );
+        $this->assertTrue($response);
+    }
 }

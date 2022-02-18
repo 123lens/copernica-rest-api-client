@@ -434,4 +434,39 @@ class Database extends BaseEndpoint
             'ID' => $response
         ], $data->toArray()));
     }
+
+    public function updateField(
+        int $databaseId,
+        int $id,
+        string $name,
+        FieldType $type = null,
+        mixed $value = null,
+        bool $displayed = false,
+        bool $ordered = false,
+        int $length = 0,
+        int $textlines = 0,
+        bool $hidden = false,
+        bool $index = false
+    ): bool {
+        $data = collect([
+            'name' => Str::slug($name),
+            'type' => $type->value ?? null,
+            'value' => !is_null($type) ?$type->prepValue($value) : $value,
+            'displayed' => $displayed,
+            'ordered' => $ordered,
+            'length' => $length,
+            'textlines' => $textlines,
+            'hidden' => $hidden,
+            'index' => $index
+        ])->reject(function ($value) {
+            return empty($value) ||
+                (is_array($value) && !count($value));
+        });
+
+        return $this->performApiCall(
+            'PUT',
+            "database/{$databaseId}/field/{$id}",
+            $data->toJson()
+        );
+    }
 }
