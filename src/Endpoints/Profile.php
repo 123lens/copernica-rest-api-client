@@ -5,6 +5,21 @@ use Budgetlens\CopernicaRestApi\Support\FieldFilter;
 
 class Profile extends BaseEndpoint
 {
+    /**
+     * Update propfile.
+     *
+     * @todo: Api always returns http status 204.. (in case of create optional 201)
+     *          Not sure how to fetch failures.
+     * @param int $databaseId
+     * @param int $id
+     * @param array $fields
+     * @param array $interests
+     * @param bool $create
+     * @return int
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\FilterUnknownOperatorException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function update(
         int $databaseId,
         int $id,
@@ -47,6 +62,17 @@ class Profile extends BaseEndpoint
             : 0;
     }
 
+    /**
+     * Update or create profile
+     * @param int $databaseId
+     * @param int $id
+     * @param array $fields
+     * @param array $interests
+     * @return int
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\FilterUnknownOperatorException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function updateOrCreate(
         int $databaseId,
         int $id,
@@ -56,4 +82,26 @@ class Profile extends BaseEndpoint
         return $this->update($databaseId, $id, $fields, $interests, true);
     }
 
+    /**
+     * Delete profiles from database
+     * @param int $databaseId
+     * @param array $ids
+     * @return bool|int|object|string|null
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function delete(int $databaseId, array $ids = [])
+    {
+        $data = collect([
+            'profiles' => $ids,
+        ])->reject(function ($value) {
+            return !count($value);
+        });
+
+        return $this->performApiCall(
+            'DELETE',
+            "database/{$databaseId}/profiles",
+            $data->toJson()
+        );
+    }
 }

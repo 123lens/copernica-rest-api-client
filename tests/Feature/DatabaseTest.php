@@ -453,16 +453,20 @@ class DatabaseTest extends TestCase
         $this->assertIsNumeric($response);
     }
 
-//    /** @test */
-//    public function canDeleteInterest()
-//    {
-//        $this->useMock(null, 204);
-//
-//        $id = 1;
-//        $response = $this->client->interest->delete(
-//            id: $id,
-//        );
-//        $this->assertTrue($response);
-//    }
+    /** @test */
+    public function canDeleteProfiles()
+    {
+        $this->useMock(null, 204);
+
+        $databaseId = 1;
+        $ids = [
+            1,
+            2,
+            3,
+        ];
+
+        $response = $this->client->profile->delete($databaseId, $ids);
+        $this->assertTrue($response);
+    }
 
 }
