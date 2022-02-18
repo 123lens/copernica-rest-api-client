@@ -1,6 +1,7 @@
 <?php
 namespace Budgetlens\CopernicaRestApi\Tests\Feature\Endpoints;
 
+use Budgetlens\CopernicaRestApi\Enum\FieldType;
 use Budgetlens\CopernicaRestApi\Resources\Account\Consumption;
 use Budgetlens\CopernicaRestApi\Resources\Account\Identity;
 use Budgetlens\CopernicaRestApi\Resources\Database;
@@ -202,6 +203,41 @@ class DatabaseTest extends TestCase
         $this->assertSame(50, $response->data->first()->length);
         $this->assertSame(1, $response->data->first()->textlines);
         $this->assertFalse($response->data->first()->hidden);
-        $this->assertSame(1, $response->data->first()->index);
+        $this->assertTrue($response->data->first()->index);
     }
+
+    /** @test */
+    public function canCreateTextField()
+    {
+        $this->useMock(null, 201, ['X-Created' => ['100']]);
+        $id = 1;
+        $response = $this->client->database->createField(
+            $id,
+            'field name',
+            FieldType::TEXT
+        );
+        $this->assertInstanceOf(Database\Field::class, $response);
+        $this->assertSame(100, $response->ID);
+    }
+
+
+    /** @test */
+    public function canCreateSelectField()
+    {
+        $this->useMock(null, 201, ['X-Created' => ['100']]);
+        $id = 1;
+        $response = $this->client->database->createField(
+            $id,
+            'selectable field',
+            FieldType::SELECT,
+            [
+                'option1',
+                'option2',
+                'option3'
+            ]
+        );
+        $this->assertInstanceOf(Database\Field::class, $response);
+        $this->assertSame(100, $response->ID);
+    }
+
 }

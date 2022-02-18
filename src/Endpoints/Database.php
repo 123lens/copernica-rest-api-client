@@ -1,6 +1,7 @@
 <?php
 namespace Budgetlens\CopernicaRestApi\Endpoints;
 
+use Budgetlens\CopernicaRestApi\Enum\FieldType;
 use Budgetlens\CopernicaRestApi\Resources\Database as DatabaseResource;
 use Budgetlens\CopernicaRestApi\Resources\Database\UnsubscribeBehaviour;
 use Budgetlens\CopernicaRestApi\Resources\PaginatedResult;
@@ -397,4 +398,40 @@ class Database extends BaseEndpoint
         ]);
     }
 
+    public function createField(
+        int $id,
+        string $name,
+        FieldType $type,
+        mixed $value = null,
+        bool $displayed = false,
+        bool $ordered = false,
+        int $length = 0,
+        int $textlines = 0,
+        bool $hidden = false,
+        bool $index = false
+    ): DatabaseResource\Field {
+        $data = collect([
+            'name' => Str::slug($name),
+            'type' => $type->value,
+            'value' => $type->prepValue($value),
+            'displayed' => $displayed,
+            'ordered' => $ordered,
+            'length' => $length,
+            'textlines' => $textlines,
+            'hidden' => $hidden,
+            'index' => $index
+        ])->reject(function ($value) {
+            return empty($value);
+        });
+
+        $response = $this->performApiCall(
+            'POST',
+            "database/{$id}/fields",
+            $data->toJson()
+        );
+
+        return new DatabaseResource\Field(array_merge([
+            'ID' => $response
+        ], $data->toArray()));
+    }
 }

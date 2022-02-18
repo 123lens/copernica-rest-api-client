@@ -14,5 +14,5 @@ class Field extends BaseResource
     public int $length;
     public int $textlines;
     public bool $hidden;
-    public int $index;
+    public bool $index;
 }
