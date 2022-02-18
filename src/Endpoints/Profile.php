@@ -1,7 +1,11 @@
 <?php
 namespace Budgetlens\CopernicaRestApi\Endpoints;
 
+use Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException;
+use Budgetlens\CopernicaRestApi\Exceptions\FilterUnknownOperatorException;
+use Budgetlens\CopernicaRestApi\Exceptions\RateLimitException;
 use Budgetlens\CopernicaRestApi\Support\FieldFilter;
+use Budgetlens\CopernicaRestApi\Resources\Profile as ProfileResource;
 
 class Profile extends BaseEndpoint
 {
@@ -10,11 +14,11 @@ class Profile extends BaseEndpoint
      * @param int $id
      * @param array $fields
      * @param array $interests
-     * @return \Budgetlens\CopernicaRestApi\Resources\Profile
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @return ProfileResource
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
-    public function create(int $id, array $fields, array $interests = []): Profile
+    public function create(int $id, array $fields, array $interests = []): ProfileResource
     {
         $data = collect([
             'fields' => $fields,
@@ -29,7 +33,7 @@ class Profile extends BaseEndpoint
             $data->toJson()
         );
 
-        return new Profile(array_merge([
+        return new ProfileResource(array_merge([
             'ID' => $response
         ], $data->toArray()));
     }
@@ -46,9 +50,9 @@ class Profile extends BaseEndpoint
      * @param array $interests
      * @param bool $create
      * @return int
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\FilterUnknownOperatorException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws FilterUnknownOperatorException
+     * @throws RateLimitException
      */
     public function update(
         int $databaseId,
@@ -99,9 +103,9 @@ class Profile extends BaseEndpoint
      * @param array $fields
      * @param array $interests
      * @return int
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\FilterUnknownOperatorException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws FilterUnknownOperatorException
+     * @throws RateLimitException
      */
     public function updateOrCreate(
         int $databaseId,
@@ -117,8 +121,8 @@ class Profile extends BaseEndpoint
      * @param int $databaseId
      * @param array $ids
      * @return bool|int|object|string|null
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function delete(int $databaseId, array $ids = [])
     {
