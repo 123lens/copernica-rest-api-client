@@ -5,9 +5,9 @@ use Budgetlens\CopernicaRestApi\Resources\BaseResource;
 
 class Field extends BaseResource
 {
-    public $field;
-    public $value;
-    public $operator;
+    public string $field;
+    public mixed $value;
+    public string $operator;
 
     public function __toString()
     {

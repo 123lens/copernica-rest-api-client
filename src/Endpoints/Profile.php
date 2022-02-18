@@ -30,7 +30,7 @@ class Profile extends BaseEndpoint
         int $id,
         int $start = 0,
         int $limit = 1000,
-        bool $calculateTotal  = false,
+        bool $calculateTotal = false,
         FieldFilter $fields = null,
         string $orderBy = null,
         string $orderDirection = null,

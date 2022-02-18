@@ -12,8 +12,8 @@ class Profile extends BaseResource
     public $interests;
     public int $database;
     public string $secret;
-    public  $created;
-    public  $modified;
+    public $created;
+    public $modified;
     public bool $removed;
 
     public function setFieldsAttribute($value): self
@@ -62,5 +62,4 @@ class Profile extends BaseResource
 
         return $this;
     }
-
 }

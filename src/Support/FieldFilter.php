@@ -103,5 +103,4 @@ class FieldFilter
 
         return $this->add($field, $value, '!~');
     }
-
 }

@@ -2,11 +2,11 @@
 namespace Budgetlens\CopernicaRestApi\Endpoints;
 
 use Budgetlens\CopernicaRestApi\Enum\FieldType;
+use Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException;
+use Budgetlens\CopernicaRestApi\Exceptions\RateLimitException;
 use Budgetlens\CopernicaRestApi\Resources\Database as DatabaseResource;
 use Budgetlens\CopernicaRestApi\Resources\Database\UnsubscribeBehaviour;
 use Budgetlens\CopernicaRestApi\Resources\PaginatedResult;
-use Budgetlens\CopernicaRestApi\Resources\Profile;
-use Budgetlens\CopernicaRestApi\Support\FieldFilter;
 use Budgetlens\CopernicaRestApi\Support\Str;
 use Illuminate\Support\Collection;
 
@@ -18,10 +18,10 @@ class Database extends BaseEndpoint
      * @param int $limit
      * @param bool $calculateTotal
      * @return PaginatedResult
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
-    public function list(int $start = 0, int $limit = 1000, bool $calculateTotal  = false): PaginatedResult
+    public function list(int $start = 0, int $limit = 1000, bool $calculateTotal = false): PaginatedResult
     {
         $parameters = $this->paginateFilter($start, $limit, $calculateTotal);
 
@@ -52,8 +52,8 @@ class Database extends BaseEndpoint
      * Get Database Details
      * @param int $id
      * @return DatabaseResource
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function get(int $id): DatabaseResource
     {
@@ -71,8 +71,8 @@ class Database extends BaseEndpoint
      * @param string $description
      * @param bool $archived
      * @return DatabaseResource
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function create(string $name, string $description, bool $archived = false): DatabaseResource
     {
@@ -101,8 +101,8 @@ class Database extends BaseEndpoint
      * @param string $name
      * @param array $options
      * @return DatabaseResource
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function copy(int $id, string $name, array $options = [])
     {
@@ -144,8 +144,8 @@ class Database extends BaseEndpoint
      * @param array $interests
      * @param array $collections
      * @return bool
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function update(
         int $id,
@@ -154,7 +154,7 @@ class Database extends BaseEndpoint
         bool $archived = null,
         \DateTime $created = null,
         array $fields = [],
-        array $interests   = [],
+        array $interests = [],
         array $collections = []
     ): bool {
         $data = collect([
@@ -181,8 +181,8 @@ class Database extends BaseEndpoint
      * Get Database Unsubscribe Behaviour
      * @param int $id
      * @return UnsubscribeBehaviour
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function getUnsubscribeBehaviour(int $id): UnsubscribeBehaviour
     {
@@ -200,8 +200,8 @@ class Database extends BaseEndpoint
      * @param string $behaviour
      * @param array $fields
      * @return bool
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function updateUnsubscribeBehaviour(int $id, string $behaviour, array $fields = []): bool
     {
@@ -227,8 +227,8 @@ class Database extends BaseEndpoint
      * @param int $limit
      * @param bool $calculateTotal
      * @return PaginatedResult
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function getSelections(
         int $id,
@@ -269,10 +269,11 @@ class Database extends BaseEndpoint
      * @param string $name
      * @param string $description
      * @return DatabaseResource\Selection
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
-    public function createSelection(int $id, string $name, string $description): DatabaseResource\Selection {
+    public function createSelection(int $id, string $name, string $description): DatabaseResource\Selection
+    {
         $data = collect([
             'name' => Str::slug($name),
             'description' => $description,
@@ -298,8 +299,8 @@ class Database extends BaseEndpoint
      * @param int $limit
      * @param bool $calculateTotal
      * @return PaginatedResult
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function getCollections(
         int $id,
@@ -337,8 +338,8 @@ class Database extends BaseEndpoint
      * @param int $id
      * @param string $name
      * @return Collection
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function createCollection(int $id, string $name): DatabaseResource\Collection
     {
@@ -366,8 +367,8 @@ class Database extends BaseEndpoint
      * @param int $limit
      * @param bool $calculateTotal
      * @return PaginatedResult
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function getFields(
         int $id,
@@ -450,8 +451,8 @@ class Database extends BaseEndpoint
      * @param bool $hidden
      * @param bool $index
      * @return bool
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function updateField(
         int $databaseId,
@@ -493,8 +494,8 @@ class Database extends BaseEndpoint
      * @param int $databaseId
      * @param int $id
      * @return bool
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function deleteField(int $databaseId, int $id): bool
     {
@@ -511,14 +512,14 @@ class Database extends BaseEndpoint
      * @param int $limit
      * @param bool $calculateTotal
      * @return PaginatedResult
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function getInterests(
         int $id,
         int $start = 0,
         int $limit = 1000,
-        bool $calculateTotal  = false
+        bool $calculateTotal = false
     ): PaginatedResult {
         $parameters = $this->paginateFilter($start, $limit, $calculateTotal);
 
@@ -551,8 +552,8 @@ class Database extends BaseEndpoint
      * @param string $name
      * @param string|null $group
      * @return DatabaseResource\Interest
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function createInterest(int $id, string $name, string $group = null): DatabaseResource\Interest
     {
@@ -578,8 +579,8 @@ class Database extends BaseEndpoint
      * Get Database Profile Ids
      * @param int $id
      * @return Collection
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function getProfileIds(int $id): Collection
     {
@@ -601,8 +602,8 @@ class Database extends BaseEndpoint
      * @param bool $fax
      * @param bool $pdf
      * @return bool
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     * @throws CopernicaApiException
+     * @throws RateLimitException
      */
     public function updateIntentions(
         int $id,
@@ -626,5 +627,4 @@ class Database extends BaseEndpoint
             $data->toJson()
         );
     }
-
 }
