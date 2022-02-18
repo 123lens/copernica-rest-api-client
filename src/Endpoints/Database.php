@@ -356,6 +356,16 @@ class Database extends BaseEndpoint
         ], $data->toArray()));
     }
 
+    /**
+     * Get Database Fields
+     * @param int $id
+     * @param int $start
+     * @param int $limit
+     * @param bool $calculateTotal
+     * @return PaginatedResult
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function getFields(
         int $id,
         int $start = 0,
