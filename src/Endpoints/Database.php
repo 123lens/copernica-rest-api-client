@@ -673,4 +673,9 @@ class Database extends BaseEndpoint
             'ID' => $response
         ], $data->toArray()));
     }
+
+    public function updateProfile()
+    {
+
+    }
 }

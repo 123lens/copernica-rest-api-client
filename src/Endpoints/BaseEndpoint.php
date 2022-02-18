@@ -85,7 +85,7 @@ abstract class BaseEndpoint
         // recevied an "X-Created" header?
         if ($response->hasHeader('X-Created')) {
             // return created ID
-            return collect($response->getHeader('X-Created'))->first();
+            return (int) collect($response->getHeader('X-Created'))->first();
         }
 
         // PUT response.

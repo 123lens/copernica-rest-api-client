@@ -76,7 +76,7 @@ class DatabaseTest extends TestCase
     public function canCopyDatabase()
     {
         $this->useMock(null, 201, ['X-Created' => ['100']]);
-        $database = $this->client->database->copy(1,'phpunit test rest copy');
+        $database = $this->client->database->copy(1, 'phpunit test rest copy');
         $this->assertInstanceOf(Database::class, $database);
         $this->assertSame(100, $database->ID);
         $this->assertSame('phpunit_test_rest_copy', $database->name);
@@ -408,4 +408,61 @@ class DatabaseTest extends TestCase
         $this->assertSame('unit', $response->fields->get('firstname'));
         $this->assertSame('test', $response->fields->get('surname'));
     }
+
+    /** @test */
+    public function canUpdateProfile()
+    {
+        $this->useMock(null, 204);
+
+        $databaseId = 1;
+        $id = 1;
+        $fields = [
+            'firstname' => 'unit',
+            'surname' => 'test'
+        ];
+        $interests = [
+            'new_name'
+        ];
+
+        $response = $this->client->profile->update(
+            $databaseId,
+            $id,
+            $fields,
+            $interests
+        );
+        $this->assertIsNumeric($response);
+    }
+
+    /** @test */
+    public function canUpdateOrCreateProfile()
+    {
+        $this->useMock(null, 204);
+
+        $databaseId = 1;
+        $id = 1;
+        $fields = [
+            'firstname' => 'unit',
+            'surname' => 'test'
+        ];
+
+        $response = $this->client->profile->updateOrCreate(
+            $databaseId,
+            $id,
+            $fields,
+        );
+        $this->assertIsNumeric($response);
+    }
+
+//    /** @test */
+//    public function canDeleteInterest()
+//    {
+//        $this->useMock(null, 204);
+//
+//        $id = 1;
+//        $response = $this->client->interest->delete(
+//            id: $id,
+//        );
+//        $this->assertTrue($response);
+//    }
+
 }

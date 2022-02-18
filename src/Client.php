@@ -84,7 +84,7 @@ class Client
         $this->account = new Account($this);
         $this->database = new Database($this);
         $this->interest = new Interest($this);
-        $thos->profile = new Profile($this);
+        $this->profile = new Profile($this);
     }
 
     /**
