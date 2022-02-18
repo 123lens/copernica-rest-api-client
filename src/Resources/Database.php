@@ -3,13 +3,13 @@ namespace Budgetlens\CopernicaRestApi\Resources;
 
 use Budgetlens\BolRetailerApi\Resources\Reduction;
 use Budgetlens\CopernicaRestApi\Resources\Concerns\HasFields;
-use Budgetlens\CopernicaRestApi\Resources\Concerns\HasIntensions;
+use Budgetlens\CopernicaRestApi\Resources\Concerns\HasIntentions;
 use Budgetlens\CopernicaRestApi\Resources\Database\Interest;
 use Illuminate\Support\Collection;
 
 class Database extends BaseResource
 {
-    use HasFields, HasIntensions;
+    use HasFields, HasIntentions;
 
     public int $ID;
     public string $name;

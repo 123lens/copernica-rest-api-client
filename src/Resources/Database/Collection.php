@@ -3,11 +3,11 @@ namespace Budgetlens\CopernicaRestApi\Resources\Database;
 
 use Budgetlens\CopernicaRestApi\Resources\BaseResource;
 use Budgetlens\CopernicaRestApi\Resources\Concerns\HasFields;
-use Budgetlens\CopernicaRestApi\Resources\Concerns\HasIntensions;
+use Budgetlens\CopernicaRestApi\Resources\Concerns\HasIntentions;
 
 class Collection extends BaseResource
 {
-    use HasFields, HasIntensions;
+    use HasFields, HasIntentions;
 
     public $ID;
     public $name;
