@@ -589,4 +589,41 @@ class Database extends BaseEndpoint
 
         return collect($response);
     }
+
+    public function getProfiles(
+        int $id,
+        int $start = 0,
+        int $limit = 1000,
+        bool $calculateTotal  = false,
+        string $fields = null,
+        string $orderBy = null,
+        string $orderDirection = null,
+        bool $dataOnly = null
+    ): PaginatedResult {
+        $parameters = $this->paginateFilter($start, $limit, $calculateTotal);
+
+        $response = $this->performApiCall(
+            'GET',
+            "database/{$id}/profiles" . $this->buildQueryString($parameters->all())
+        );
+
+        $items = $response->data ?? null;
+
+        $collection = new Collection();
+
+        if (!is_null($items)) {
+            collect($items)->each(function ($item) use ($collection) {
+                $collection->push(new Profile($item));
+            });
+        }
+
+        return new PaginatedResult([
+            'start' => $response->start ?? 0,
+            'limit' => $response->limit ?? 0,
+            'total' => $calculateTotal ? ($response->total ?? 0) : null,
+            'count' => $calculateTotal ? ($response->count ?? 0) : null,
+            'data' => $collection
+        ]);
+    }
+
 }

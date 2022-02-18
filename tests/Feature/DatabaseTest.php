@@ -6,6 +6,7 @@ use Budgetlens\CopernicaRestApi\Resources\Account\Consumption;
 use Budgetlens\CopernicaRestApi\Resources\Account\Identity;
 use Budgetlens\CopernicaRestApi\Resources\Database;
 use Budgetlens\CopernicaRestApi\Resources\PaginatedResult;
+use Budgetlens\CopernicaRestApi\Resources\Profile;
 use Budgetlens\CopernicaRestApi\Tests\TestCase;
 use Illuminate\Support\Collection;
 
@@ -326,5 +327,26 @@ class DatabaseTest extends TestCase
         $id = 1;
         $response = $this->client->database->getProfileIds($id);
         $this->assertInstanceOf(Collection::class, $response);
+    }
+
+    /** @test */
+    public function canListProfiles()
+    {
+        $this->useMock('200-get-database-profiles.json');
+        $id = 1;
+        $response = $this->client->database->getProfiles($id);
+        $this->assertInstanceOf(PaginatedResult::class, $response);
+        $this->assertInstanceOf(Profile::class, $response->data->first());
+        $this->assertSame(1, $response->data->first()->ID);
+        $this->assertInstanceOf(Collection::class, $response->data->first()->fields);
+        $this->assertSame('field1', $response->data->first()->fields->get('field1'));
+        $this->assertSame('field2', $response->data->first()->fields->get('field2'));
+        $this->assertInstanceOf(Collection::class, $response->data->first()->interests);
+        $this->assertInstanceOf(Database\Interest::class, $response->data->first()->interests->first());
+        $this->assertSame(1, $response->data->first()->database);
+        $this->assertSame('secret1', $response->data->first()->secret);
+        $this->assertInstanceOf(\DateTime::class, $response->data->first()->created);
+        $this->assertInstanceOf(\DateTime::class, $response->data->first()->modified);
+        $this->assertFalse($response->data->first()->removed);
     }
 }
