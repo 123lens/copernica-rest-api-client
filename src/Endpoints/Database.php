@@ -542,4 +542,33 @@ class Database extends BaseEndpoint
             'data' => $collection
         ]);
     }
+
+    /**
+     * Create Database Interest
+     * @param int $id
+     * @param string $name
+     * @param string|null $group
+     * @return DatabaseResource\Interest
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function createInterest(int $id, string $name, string $group = null): DatabaseResource\Interest
+    {
+        $data = collect([
+            'name' => Str::slug($name),
+            'group' => $group
+        ])->reject(function ($value) {
+            return empty($value);
+        });
+
+        $response = $this->performApiCall(
+            'POST',
+            "database/{$id}/interests",
+            $data->toJson()
+        );
+
+        return new DatabaseResource\Interest(array_merge([
+            'ID' => $response
+        ], $data->toArray()));
+    }
 }

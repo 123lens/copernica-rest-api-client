@@ -281,4 +281,18 @@ class DatabaseTest extends TestCase
         $this->assertSame('optin_common', $response->data->first()->name);
         $this->assertSame('Newsletter', $response->data->first()->group);
     }
+
+    /** @test */
+    public function canCreateInterest()
+    {
+        $this->useMock(null, 201, ['X-Created' => ['100']]);
+        $id = 1;
+        $response = $this->client->database->createInterest($id, 'interest name', 'group name');
+        $this->assertInstanceOf(Database\Interest::class, $response);
+        $this->assertSame(100, $response->ID);
+        $this->assertSame('interest_name', $response->name);
+        $this->assertSame('group name', $response->group);
+    }
+
+
 }
