@@ -299,11 +299,22 @@ class DatabaseTest extends TestCase
     {
         $this->useMock(null, 204);
 
-        $databaseId = 1;
         $id = 1;
         $response = $this->client->interest->update(
             id: $id,
             group: 'new group name',
+        );
+        $this->assertTrue($response);
+    }
+
+    /** @test */
+    public function canDeleteInterest()
+    {
+        $this->useMock(null, 204);
+
+        $id = 1;
+        $response = $this->client->interest->delete(
+            id: $id,
         );
         $this->assertTrue($response);
     }
