@@ -4,11 +4,69 @@ namespace Budgetlens\CopernicaRestApi\Endpoints;
 use Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException;
 use Budgetlens\CopernicaRestApi\Exceptions\FilterUnknownOperatorException;
 use Budgetlens\CopernicaRestApi\Exceptions\RateLimitException;
+use Budgetlens\CopernicaRestApi\Resources\PaginatedResult;
 use Budgetlens\CopernicaRestApi\Support\FieldFilter;
 use Budgetlens\CopernicaRestApi\Resources\Profile as ProfileResource;
+use Illuminate\Support\Collection;
 
 class Profile extends BaseEndpoint
 {
+    /**
+     * Get Profiles
+     * @todo: Implement orderBy / orderDir / DataOnly
+     * @param int $id
+     * @param int $start
+     * @param int $limit
+     * @param bool $calculateTotal
+     * @param FieldFilter|null $fields
+     * @param string|null $orderBy
+     * @param string|null $orderDirection
+     * @param bool|null $dataOnly
+     * @return PaginatedResult
+     * @throws CopernicaApiException
+     * @throws RateLimitException
+     */
+    public function list(
+        int $id,
+        int $start = 0,
+        int $limit = 1000,
+        bool $calculateTotal  = false,
+        FieldFilter $fields = null,
+        string $orderBy = null,
+        string $orderDirection = null,
+        bool $dataOnly = null
+    ): PaginatedResult {
+        $pagination = $this->paginateFilter($start, $limit, $calculateTotal);
+
+        $parameters = collect(array_merge($pagination->all(), [
+            'fields[]' => !is_null($fields) ? $fields->toArray() : null
+        ]));
+
+        $response = $this->performApiCall(
+            'GET',
+            "database/{$id}/profiles" . $this->buildQueryString($parameters->all())
+        );
+
+        $items = $response->data ?? null;
+
+        $collection = new Collection();
+
+        if (!is_null($items)) {
+            collect($items)->each(function ($item) use ($collection) {
+                $collection->push(new ProfileResource($item));
+            });
+        }
+
+        return new PaginatedResult([
+            'start' => $response->start ?? 0,
+            'limit' => $response->limit ?? 0,
+            'total' => $calculateTotal ? ($response->total ?? 0) : null,
+            'count' => $calculateTotal ? ($response->count ?? 0) : null,
+            'data' => $collection
+        ]);
+    }
+
+
     /**
      * Create Database Profile
      * @param int $id

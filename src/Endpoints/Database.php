@@ -592,60 +592,6 @@ class Database extends BaseEndpoint
     }
 
     /**
-     * Get Profiles
-     * @param int $id
-     * @param int $start
-     * @param int $limit
-     * @param bool $calculateTotal
-     * @param string|null $fields
-     * @param string|null $orderBy
-     * @param string|null $orderDirection
-     * @param bool|null $dataOnly
-     * @return PaginatedResult
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
-     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
-     */
-    public function getProfiles(
-        int $id,
-        int $start = 0,
-        int $limit = 1000,
-        bool $calculateTotal  = false,
-        FieldFilter $fields = null,
-        string $orderBy = null,
-        string $orderDirection = null,
-        bool $dataOnly = null
-    ): PaginatedResult {
-        $pagination = $this->paginateFilter($start, $limit, $calculateTotal);
-
-        $parameters = collect(array_merge($pagination->all(), [
-            'fields[]' => !is_null($fields) ? $fields->toArray() : null
-        ]));
-
-        $response = $this->performApiCall(
-            'GET',
-            "database/{$id}/profiles" . $this->buildQueryString($parameters->all())
-        );
-
-        $items = $response->data ?? null;
-
-        $collection = new Collection();
-
-        if (!is_null($items)) {
-            collect($items)->each(function ($item) use ($collection) {
-                $collection->push(new Profile($item));
-            });
-        }
-
-        return new PaginatedResult([
-            'start' => $response->start ?? 0,
-            'limit' => $response->limit ?? 0,
-            'total' => $calculateTotal ? ($response->total ?? 0) : null,
-            'count' => $calculateTotal ? ($response->count ?? 0) : null,
-            'data' => $collection
-        ]);
-    }
-
-    /**
      * Update Intensions
      *
      * @todo: Always returns NULL???
