@@ -389,4 +389,23 @@ class DatabaseTest extends TestCase
         $filter = new FieldFilter();
         $filter->add('sex', 'M', '!==');
     }
+
+    /** @test */
+    public function canCreateProfile()
+    {
+        $this->useMock(null, 201, ['X-Created' => ['100']]);
+        $id = 1;
+        $fields = [
+            'firstname' => 'unit',
+            'surname' => 'test'
+        ];
+        $interests = [
+            'new_name'
+        ];
+        $response = $this->client->database->createProfile($id, $fields, $interests);
+        $this->assertInstanceOf(Profile::class, $response);
+        $this->assertSame(100, $response->ID);
+        $this->assertSame('unit', $response->fields->get('firstname'));
+        $this->assertSame('test', $response->fields->get('surname'));
+    }
 }

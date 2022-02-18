@@ -645,4 +645,32 @@ class Database extends BaseEndpoint
         ]);
     }
 
+    /**
+     * Create Database Profile
+     * @param int $id
+     * @param array $fields
+     * @param array $interests
+     * @return Profile
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function createProfile(int $id, array $fields, array $interests = []): Profile
+    {
+        $data = collect([
+            'fields' => $fields,
+            'interests' => $interests
+        ])->reject(function ($value) {
+            return !count($value);
+        });
+
+        $response = $this->performApiCall(
+            'POST',
+            "database/{$id}/profiles",
+            $data->toJson()
+        );
+
+        return new Profile(array_merge([
+            'ID' => $response
+        ], $data->toArray()));
+    }
 }

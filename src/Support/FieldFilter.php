@@ -15,6 +15,10 @@ class FieldFilter
         $this->fields = new Collection();
     }
 
+    /**
+     * Output array with each filter as string
+     * @return array
+     */
     public function toArray()
     {
         $output = [];
@@ -25,6 +29,14 @@ class FieldFilter
         return $output;
     }
 
+    /**
+     * Add filter
+     * @param string $field
+     * @param mixed $value
+     * @param string $operator
+     * @return $this
+     * @throws FilterUnknownOperatorException
+     */
     public function add(string $field, mixed $value, string $operator = '=='): self
     {
         if (!in_array($operator, $this->operators)) {
