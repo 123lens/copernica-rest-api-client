@@ -2,6 +2,7 @@
 namespace Budgetlens\CopernicaRestApi\Tests\Feature\Endpoints;
 
 use Budgetlens\CopernicaRestApi\Enum\FieldType;
+use Budgetlens\CopernicaRestApi\Exceptions\FilterUnknownOperatorException;
 use Budgetlens\CopernicaRestApi\Resources\Account\Consumption;
 use Budgetlens\CopernicaRestApi\Resources\Account\Identity;
 use Budgetlens\CopernicaRestApi\Resources\Database;
@@ -355,7 +356,7 @@ class DatabaseTest extends TestCase
     public function canListProfilesFilterd()
     {
         $this->useMock('200-get-database-profiles-filterd.json');
-        $id = 5;
+        $id = 1;
         // build filters.
         $filter = new FieldFilter();
         $filter->add('sex', 'M');
@@ -376,5 +377,16 @@ class DatabaseTest extends TestCase
         $this->assertInstanceOf(\DateTime::class, $response->data->first()->created);
         $this->assertInstanceOf(\DateTime::class, $response->data->first()->modified);
         $this->assertFalse($response->data->first()->removed);
+    }
+
+    /** @test */
+    public function unknownFilterOperatorThrowsException()
+    {
+        $this->expectException(FilterUnknownOperatorException::class);
+        $this->expectExceptionMessage('!==');
+        $id = 1;
+        // build filters.
+        $filter = new FieldFilter();
+        $filter->add('sex', 'M', '!==');
     }
 }

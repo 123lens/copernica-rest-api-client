@@ -1,6 +1,7 @@
 <?php
 namespace Budgetlens\CopernicaRestApi\Support;
 
+use Budgetlens\CopernicaRestApi\Exceptions\FilterUnknownOperatorException;
 use Budgetlens\CopernicaRestApi\Resources\Filter\Field;
 use Illuminate\Support\Collection;
 
@@ -26,6 +27,10 @@ class FieldFilter
 
     public function add(string $field, mixed $value, string $operator = '=='): self
     {
+        if (!in_array($operator, $this->operators)) {
+            throw new FilterUnknownOperatorException($operator);
+        }
+
         $this->fields->push(new Field([
             'field' => $field,
             'value' => $value,
