@@ -217,6 +217,16 @@ class Database extends BaseEndpoint
         );
     }
 
+    /**
+     * Get Database Selections
+     * @param int $id
+     * @param int $start
+     * @param int $limit
+     * @param bool $calculateTotal
+     * @return PaginatedResult
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function getSelections(int $id, int $start = 0, int $limit = 1000, bool $calculateTotal = false)
     {
         $parameters = $this->paginateFilter($start, $limit, $calculateTotal);
@@ -244,6 +254,17 @@ class Database extends BaseEndpoint
         ]);
     }
 
+    /**
+     * Create Database Selection
+     *
+     * @todo: "description" is being ignored bug?
+     * @param int $id
+     * @param string $name
+     * @param string $description
+     * @return DatabaseResource\Selection
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
     public function createSelection(int $id, string $name, string $description): DatabaseResource\Selection {
         $data = collect([
             'name' => Str::slug($name),

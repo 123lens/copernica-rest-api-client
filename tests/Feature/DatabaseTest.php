@@ -125,11 +125,9 @@ class DatabaseTest extends TestCase
     /** @test */
     public function canListSelections()
     {
-//        $this->useMock('200-get-database-selections.json');
-        $id = 48;
+        $this->useMock('200-get-database-selections.json');
+        $id = 1;
         $response = $this->client->database->getSelections($id);
-        print_r($response);
-        exit;
         $this->assertInstanceOf(PaginatedResult::class, $response);
         $this->assertCount(2, $response->data);
         $this->assertInstanceOf(Database\Selection::class, $response->data->first());
@@ -148,7 +146,6 @@ class DatabaseTest extends TestCase
     public function canCreateSelection()
     {
         $this->useMock(null, 201, ['X-Created' => ['100']]);
-        // description not working
         $response = $this->client->database->createSelection(1, 'selection name', 'unit test');
         $this->assertInstanceOf(Database\Selection::class, $response);
         $this->assertSame(100, $response->ID);
