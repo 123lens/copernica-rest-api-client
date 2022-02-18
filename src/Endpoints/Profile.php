@@ -6,6 +6,36 @@ use Budgetlens\CopernicaRestApi\Support\FieldFilter;
 class Profile extends BaseEndpoint
 {
     /**
+     * Create Database Profile
+     * @param int $id
+     * @param array $fields
+     * @param array $interests
+     * @return \Budgetlens\CopernicaRestApi\Resources\Profile
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
+     * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
+     */
+    public function create(int $id, array $fields, array $interests = []): Profile
+    {
+        $data = collect([
+            'fields' => $fields,
+            'interests' => $interests
+        ])->reject(function ($value) {
+            return !count($value);
+        });
+
+        $response = $this->performApiCall(
+            'POST',
+            "database/{$id}/profiles",
+            $data->toJson()
+        );
+
+        return new Profile(array_merge([
+            'ID' => $response
+        ], $data->toArray()));
+    }
+
+
+    /**
      * Update propfile.
      *
      * @todo: Api always returns http status 204.. (in case of create optional 201)
