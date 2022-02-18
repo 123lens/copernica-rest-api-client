@@ -182,4 +182,26 @@ class DatabaseTest extends TestCase
         $this->assertSame(100, $response->ID);
         $this->assertSame('collection_name', $response->name);
     }
+
+    /** @test */
+    public function canListFields()
+    {
+        $this->useMock('200-get-database-fields.json');
+
+        $id = 1;
+        $response = $this->client->database->getFields($id);
+        $this->assertInstanceOf(PaginatedResult::class, $response);
+        $this->assertCount(3, $response->data);
+        $this->assertInstanceOf(Database\Field::class, $response->data->first());
+        $this->assertSame(1, $response->data->first()->ID);
+        $this->assertSame('field1', $response->data->first()->name);
+        $this->assertSame('integer', $response->data->first()->type);
+        $this->assertSame("0", $response->data->first()->value);
+        $this->assertFalse($response->data->first()->displayed);
+        $this->assertFalse($response->data->first()->ordered);
+        $this->assertSame(50, $response->data->first()->length);
+        $this->assertSame(1, $response->data->first()->textlines);
+        $this->assertFalse($response->data->first()->hidden);
+        $this->assertSame(1, $response->data->first()->index);
+    }
 }

@@ -5,14 +5,14 @@ use Budgetlens\CopernicaRestApi\Resources\BaseResource;
 
 class Field extends BaseResource
 {
-    public $ID;
-    public $name;
-    public $type;
-    public $value;
-    public $displayed;
-    public $ordered;
-    public $length;
-    public $textlines;
-    public $hidden;
-    public $index;
+    public int $ID;
+    public string $name;
+    public string $type;
+    public mixed $value;
+    public bool $displayed;
+    public bool $ordered;
+    public int $length;
+    public int $textlines;
+    public bool $hidden;
+    public int $index;
 }
