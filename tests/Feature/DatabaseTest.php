@@ -294,5 +294,19 @@ class DatabaseTest extends TestCase
         $this->assertSame('group name', $response->group);
     }
 
+    /** @test */
+    public function canUpdateInterest()
+    {
+        $this->useMock(null, 204);
+
+        $databaseId = 1;
+        $id = 1;
+        $response = $this->client->interest->update(
+            id: $id,
+            group: 'new group name',
+        );
+        $this->assertTrue($response);
+    }
+
 
 }
