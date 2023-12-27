@@ -1,7 +1,6 @@
 {
     "name": "budgetlens/copernica-rest-api-client",
     "description": "Copernica Rest API client",
-    "version": "3.0.2",
     "keywords": [
         "copernica",
         "rest",
@@ -22,7 +21,7 @@
         "ext-json": "*",
         "guzzlehttp/guzzle": "^7.4",
         "composer/ca-bundle": "^1.3",
-        "illuminate/collections": "^9.1"
+        "illuminate/collections": "^9.1|^10.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
