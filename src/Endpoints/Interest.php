@@ -19,7 +19,7 @@ class Interest extends BaseEndpoint
      * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
      * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
      */
-    public function update(int $id, string $name = null, string $group = null): bool
+    public function update(int $id, ?string $name = null, ?string $group = null): bool
     {
         $data = collect([
             'name' => !is_null($name) ? Str::slug($name) : null,

@@ -28,7 +28,7 @@ class Account extends BaseEndpoint
      * @throws \Budgetlens\CopernicaRestApi\Exceptions\CopernicaApiException
      * @throws \Budgetlens\CopernicaRestApi\Exceptions\RateLimitException
      */
-    public function consumption(\DateTime $begin, \DateTime $end = null)
+    public function consumption(\DateTime $begin, ?\DateTime $end = null)
     {
         $parameters = collect([
             'begin' => $begin,

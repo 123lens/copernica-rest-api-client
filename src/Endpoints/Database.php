@@ -149,10 +149,10 @@ class Database extends BaseEndpoint
      */
     public function update(
         int $id,
-        string $name = null,
-        string $description = null,
-        bool $archived = null,
-        \DateTime $created = null,
+        ?string $name = null,
+        ?string $description = null,
+        ?bool $archived = null,
+        ?\DateTime $created = null,
         array $fields = [],
         array $interests = [],
         array $collections = []
@@ -458,7 +458,7 @@ class Database extends BaseEndpoint
         int $databaseId,
         int $id,
         string $name,
-        FieldType $type = null,
+        ?FieldType $type = null,
         mixed $value = null,
         bool $displayed = false,
         bool $ordered = false,
@@ -555,7 +555,7 @@ class Database extends BaseEndpoint
      * @throws CopernicaApiException
      * @throws RateLimitException
      */
-    public function createInterest(int $id, string $name, string $group = null): DatabaseResource\Interest
+    public function createInterest(int $id, string $name, ?string $group = null): DatabaseResource\Interest
     {
         $data = collect([
             'name' => Str::slug($name),

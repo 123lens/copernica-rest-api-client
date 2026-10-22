@@ -31,10 +31,10 @@ class Profile extends BaseEndpoint
         int $start = 0,
         int $limit = 1000,
         bool $calculateTotal = false,
-        FieldFilter $fields = null,
-        string $orderBy = null,
-        string $orderDirection = null,
-        bool $dataOnly = null
+        ?FieldFilter $fields = null,
+        ?string $orderBy = null,
+        ?string $orderDirection = null,
+        ?bool $dataOnly = null
     ): PaginatedResult {
         $pagination = $this->paginateFilter($start, $limit, $calculateTotal);
 
